@@ -1,21 +1,37 @@
-City Name Validation using Multi-LLM (Groq API):
+# City Name Validation Engine (Multi-LLM via Groq API)
 
-This project automates the validation of city names present within textual descriptions by comparing an expected city against the actual content using multiple Large Language Models (LLMs).
+An end-to-end data validation pipeline that evaluates city name occurrences within text descriptions by benchmarking predictions from multiple Large Language Models (LLMs) against an automated rule-based ground-truth engine.
 
-The solution processes structured data from Excel, applies carefully designed prompts, and queries Moonshot and LLaMA models through the Groq API. Alongside model-based reasoning, a rule-based validation mechanism is used to independently verify city name presence, improving reliability and consistency.
+This system reads structured Excel datasets, applies dynamic prompt templates, and executes parallel API calls to open-weight models (`qwen/qwen3.8-27b` and `openai/gpt-oss-20b`) hosted on **Groq**. It incorporates rate-limit safeguards, reasoning token optimization, and output classification verification.
 
-Parallel processing is implemented to handle large datasets efficiently, and all results—including model outputs and verification status—are written back to Excel for easy analysis and review.
+---
 
+## 🌟 Key Features
 
-Key Capabilities:
+* **Multi-LLM Comparative Benchmarking**: Evaluates and compares predictions simultaneously across different model architectures (**Qwen 27B** vs **GPT-OSS 20B**).
+* **Rule-Based Ground-Truth Engine**: Implements a Python substring matching mechanism (`City_Check`) to serve as an objective baseline for model accuracy verification.
+* **Reasoning Model Token Handling**: Configured with `max_tokens: 500` to ensure `gpt-oss` reasoning models complete internal thinking steps without returning blank responses.
+* **Rate-Limit Safe Concurrency**: Uses `ThreadPoolExecutor` (`MAX_THREADS = 2`) coupled with calibrated delays (`time.sleep(8.0)`) to maintain strict compliance with Groq's 30 Requests Per Minute (RPM) free-tier limit.
+* **Modular Model Execution**: Streamlined model iteration using concise list comprehensions for scalable multi-model calls.
+* **Automated Audit Matrix**: Generates a consolidated `Result_Check` column that auto-classifies model correctness, pinpoints mismatches, and outputs summary execution metrics.
 
-Multi-LLM comparison using Moonshot and LLaMA
-High-performance inference via Groq API
-Prompt-driven city name classification
-Rule-based validation for accuracy assurance
-Scalable parallel execution
-End-to-end Excel automation
+---
 
+## 🛠️ Tech Stack
 
-Technology Stack:
-Python, Pandas, Groq API, Prompt Engineering, Concurrent Processing, Excel Automation
+* **Language**: Python 3.10+
+* **Data Manipulation**: Pandas, OpenPyXL
+* **LLM Infrastructure**: Groq REST API (`requests`)
+* **Concurrency & Execution**: `concurrent.futures.ThreadPoolExecutor`, `tqdm`
+* **Configuration**: `python-dotenv`
+
+---
+
+## 🚀 Setup & Installation
+
+### 1. Clone & Install Dependencies
+
+```bash
+git clone [https://github.com/Sarwesh0206/LLM_Comparison_Data.git](https://github.com/Sarwesh0206/LLM_Comparison_Data.git)
+cd LLM_Comparison_Data
+pip install pandas requests tqdm python-dotenv openpyxl
